@@ -1,0 +1,30 @@
+{% extends "core/base.html" %}
+{% block content %}
+<div class="form-container">
+  <h2>Sign Up</h2>
+  <form method="post">
+    {% csrf_token %}
+    <label>Email</label>
+    <input type="email" name="email" required>
+
+    <label>Username</label>
+    <input type="text" name="username" required>
+
+    <label>Password</label>
+    <input type="password" name="password1" required>
+
+    <label>Confirm Password</label>
+    <input type="password" name="password2" required>
+
+    <button type="submit">Sign Up</button>
+  </form>
+
+  {% if messages %}
+    <ul>
+      {% for msg in messages %}
+        <li>{{ msg }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+</div>
+{% endblock %}

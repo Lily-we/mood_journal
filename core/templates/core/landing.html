@@ -1,0 +1,238 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to Mood Journal</title>
+  <style>
+    body {
+      font-family: 'Nunito', 'Segoe UI', sans-serif;
+      margin: 0;
+      background-color: #f8f6fc;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    header {
+      background: linear-gradient(135deg, #D8B4F8, #c19cf5);
+      color: #fff;
+      padding: 2rem 3rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      z-index: 2;
+    }
+
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: bold;
+      font-size: 1.5rem;
+    }
+
+    .logo img {
+      height: 50px;
+      width: 50px;
+      border-radius: 8px;
+      filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.5));
+    }
+
+    .nav-links a {
+      margin: 0 0.5rem;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .nav-links a:hover {
+      text-decoration: underline;
+    }
+
+    .account-menu {
+      position: relative;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .account-menu .dropdown {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 120%;
+      background: #fff;
+      color: #333;
+      border-radius: 10px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+      min-width: 120px;
+      overflow: hidden;
+      z-index: 5;
+    }
+
+    .account-menu:hover .dropdown { display: block; }
+    .account-menu .dropdown a {
+      display: block;
+      padding: 0.5rem 1rem;
+      color: #333;
+      text-decoration: none;
+    }
+    .account-menu .dropdown a:hover { background: #f0e5ff; }
+
+    /* Hero Section */
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 2rem;
+      background: linear-gradient(135deg, #f0e5ff, #e0d4f8);
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      color: #6b3fa0;
+      margin-bottom: 1rem;
+    }
+
+    .hero p {
+      font-size: 1.25rem;
+      margin-bottom: 2rem;
+      color: #333;
+    }
+
+    .hero .cta-buttons a {
+      display: inline-block;
+      margin: 0.5rem;
+      padding: 1rem 2rem;
+      background-color: #a06cd5;
+      color: #fff;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .hero .cta-buttons a:hover { background-color: #8b4bcc; }
+
+    /* Features Section */
+    .features {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      padding: 4rem 2rem;
+      background-color: #fff;
+      gap: 2rem;
+    }
+
+    .feature-card {
+      background: #f8f6fc;
+      padding: 2rem;
+      border-radius: 20px;
+      text-align: center;
+      width: 250px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+      transition: transform 0.3s;
+    }
+
+    .feature-card:hover { transform: translateY(-5px); }
+    .feature-card h3 { color: #6b3fa0; margin-bottom: 1rem; }
+    .feature-card p { color: #555; }
+
+    /* Analytics showcase */
+    .analytics {
+      padding: 4rem 2rem;
+      text-align: center;
+      background: #f0e5ff;
+    }
+
+    .analytics h2 { color: #6b3fa0; margin-bottom: 2rem; }
+
+    .analytics img {
+      max-width: 90%;
+      border-radius: 12px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+    }
+
+    /* Footer */
+    footer {
+      background: linear-gradient(135deg, #D8B4F8, #c19cf5);
+      color: #fff;
+      text-align: center;
+      padding: 2rem;
+      box-shadow: 0 -4px 12px rgba(0,0,0,0.1);
+      z-index: 2;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-container">
+      <div class="logo">
+        <img src="{% static 'core/logo.png' %}" alt="Logo">
+        <span>Mood Journal</span>
+      </div>
+      <nav class="nav-links">
+        <a href="{% url 'submit_mood' %}">Submit Mood</a>
+        <a href="{% url 'analytics' %}">Analytics</a>
+      </nav>
+      <div class="account-menu">
+        {% if user.is_authenticated %}
+          {{ user.username }}
+          <div class="dropdown">
+            <a href="{% url 'profile' %}">Profile</a>
+            <a href="{% url 'logout' %}">Logout</a>
+          </div>
+        {% else %}
+          <a href="{% url 'login' %}">Login</a>
+        {% endif %}
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <h1>Track Your Mood, Understand Yourself</h1>
+    <p>Simple, beautiful, and insightful mood tracking for a better day-to-day life.</p>
+    <div class="cta-buttons">
+      <a href="{% url 'submit_mood' %}">Submit Mood Now</a>
+      <a href="{% url 'signup' %}">Get Started</a>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="feature-card">
+      <h3>Daily Mood Tracking</h3>
+      <p>Quickly log your mood and thoughts every day.</p>
+    </div>
+    <div class="feature-card">
+      <h3>Insights & Analytics</h3>
+      <p>Visualize patterns and understand your emotional trends.</p>
+    </div>
+    <div class="feature-card">
+      <h3>Reflection Notes</h3>
+      <p>Add personal notes for a deeper understanding of your day.</p>
+    </div>
+    <div class="feature-card">
+      <h3>Beautiful Design</h3>
+      <p>Cozy and modern interface to make journaling enjoyable.</p>
+    </div>
+  </section>
+
+  <section class="analytics">
+    <h2>See Your Mood Trends</h2>
+    <img src="{% static 'core/analytics_demo.png' %}" alt="Analytics Demo">
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Mood Journal | <a href="#" style="color:white;">Privacy</a> | <a href="#" style="color:white;">Terms</a></p>
+  </footer>
+</body>
+</html>

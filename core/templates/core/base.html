@@ -1,0 +1,148 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Mood Journal{% endblock %}</title>
+  <style>
+    body {
+      font-family: 'Nunito', 'Segoe UI', sans-serif;
+      background-color: #f8f6fc;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Header */
+    header {
+      background: linear-gradient(135deg, #D8B4F8, #c19cf5);
+      color: #fff;
+      padding: 2rem 3rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      z-index: 2;
+    }
+
+    .logo img { height: 60px; width: 60px; border-radius: 8px; }
+    .header-container { display: flex; justify-content: space-between; align-items: center; }
+    .logo { display: flex; align-items: center; gap: 0.5rem; font-weight: bold; font-size: 1.2rem; }
+    .nav-links a { margin: 0 0.5rem; color: #fff; text-decoration: none; font-weight: 500; }
+    .nav-links a:hover { text-decoration: underline; }
+
+    .account-menu { position: relative; font-weight: 500; }
+
+    /* Dropdown */
+    #accountDropdown {
+      position: absolute;
+      right: 0;
+      margin-top: 0.5rem;
+      width: 160px;
+      background-color: #fff;
+      border-radius: 0.75rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      display: none;
+      z-index: 10;
+    }
+    #accountDropdown a,
+    #accountDropdown button {
+      display: block;
+      padding: 0.5rem 1rem;
+      color: #333;
+      text-decoration: none;
+      background: transparent;
+      border: none;
+      text-align: left;
+      width: 100%;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    #accountDropdown a:hover,
+    #accountDropdown button:hover { background-color: #f0f0f0; }
+
+    footer { background: linear-gradient(135deg, #D8B4F8, #c19cf5); color: #fff; text-align: center; padding: 2rem 0; box-shadow: 0 -4px 12px rgba(0,0,0,0.1); z-index: 2; }
+    main { flex: 1; display: flex; justify-content: center; align-items: center; padding: 2rem; z-index: 2; }
+    .card { background: #fff; padding: 2rem; border-radius: 20px; box-shadow: 0 4px 14px rgba(0,0,0,0.1); max-width: 500px; width: 100%; text-align: center; }
+    h2 { color: #6b3fa0; margin: 0 0 1rem; }
+    p { color: #333; }
+    button, a.button-link { display: inline-block; margin-top: 1.5rem; background-color: #a06cd5; color: #fff; text-decoration: none; padding: 0.75rem 1.5rem; border-radius: 10px; border: none; cursor: pointer; transition: 0.3s; }
+    button:hover, a.button-link:hover { background-color: #8b4bcc; }
+
+    .petal { position: fixed; top: -10px; background-color: #D8B4F8; border-radius: 50%; opacity: 0.8; animation: fall linear infinite; z-index: 1; }
+    @keyframes fall { to { transform: translateY(110vh) rotate(360deg); opacity: 0; } }
+  </style>
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+  <header>
+    <div class="header-container">
+      <div class="logo">
+        <img src="{% static 'core/logo.png' %}" alt="Logo">
+        <span>Mood Journal</span>
+      </div>
+      <nav class="nav-links">
+        <a href="{% url 'submit_mood' %}">Submit Mood</a>
+        <a href="{% url 'analytics' %}">Analytics</a>
+      </nav>
+
+      <div class="account-menu">
+        {% if user.is_authenticated %}
+          <button id="accountMenuButton">{{ user.username }} ⬇</button>
+          <div id="accountDropdown">
+            <a href="{% url 'profile' %}">Profile</a>
+      </div>
+        {% else %}
+          <a href="{% url 'login' %}" class="button-link">Login</a>
+          <a href="{% url 'signup' %}" class="button-link">Signup</a>
+        {% endif %}
+      </div>
+    </div>
+  </header>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Mood Journal</p>
+  </footer>
+
+  <script>
+    // Dropdown menu toggle
+    document.addEventListener("DOMContentLoaded", () => {
+      const button = document.getElementById("accountMenuButton");
+      const dropdown = document.getElementById("accountDropdown");
+      if (button) {
+        button.addEventListener("click", (e) => {
+          e.stopPropagation();
+          dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        });
+        document.addEventListener("click", (event) => {
+          if (!button.contains(event.target) && !dropdown.contains(event.target)) {
+            dropdown.style.display = "none";
+          }
+        });
+      }
+    });
+
+    // Falling petals
+    function createPetal() {
+      const petal = document.createElement("div");
+      petal.classList.add("petal");
+      document.body.appendChild(petal);
+      const size = Math.random() * 10 + 8;
+      petal.style.width = `${size}px`;
+      petal.style.height = `${size * 1.4}px`;
+      petal.style.left = Math.random() * window.innerWidth + "px";
+      petal.style.animationDuration = (Math.random() * 4 + 4) + "s"; 
+      petal.style.opacity = Math.random() * 0.8 + 0.2;
+      setTimeout(() => { petal.remove(); }, 9000);
+    }
+    setInterval(createPetal, 100);
+  </script>
+
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

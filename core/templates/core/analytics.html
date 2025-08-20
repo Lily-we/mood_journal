@@ -1,0 +1,42 @@
+{% extends "core/base.html" %}
+{% block title %}Analytics{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+  <h2>Your Mood Analytics</h2>
+  <p>Total Entries: {{ total_entries }}</p>
+  <p>Average Mood: {{ average_mood }}</p>
+
+  <canvas id="moodChart" width="400" height="200"></canvas>
+</div>
+
+<script>
+const dailyData = {{ daily_data|safe }};
+
+const labels = [...new Set(dailyData.map(item => item.date))];
+const moods = [...new Set(dailyData.map(item => item.mood))];
+
+const moodNames = {1:"Very bad", 2:"Bad", 3:"Okay", 4:"Good", 5:"Great"};
+
+const datasets = moods.map(mood => ({
+    label: moodNames[mood],
+    data: labels.map(date => {
+        const record = dailyData.find(item => item.date === date && item.mood === mood);
+        return record ? record.count : 0;
+    }),
+    borderColor: '#' + Math.floor(Math.random()*16777215).toString(16),
+    fill: false
+}));
+
+const ctx = document.getElementById('moodChart').getContext('2d');
+new Chart(ctx, {
+    type: 'line',
+    data: { labels, datasets },
+    options: { responsive: true, plugins: { legend: { position: 'top' } }, scales: { y: { beginAtZero: true } } }
+});
+</script>
+{% endblock %}

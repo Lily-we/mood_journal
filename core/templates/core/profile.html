@@ -1,0 +1,94 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title %}Profile{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+  <h2>User Profile</h2>
+
+  <!-- Logout button -->
+  <form method="POST" action="{% url 'logout' %}" style="margin-bottom:1rem;">
+    {% csrf_token %}
+    <button type="submit" style="background:#a06cd5; color:#fff; border:none; padding:0.5rem 1rem; border-radius:8px; cursor:pointer;">
+      Logout
+    </button>
+  </form>
+
+  <!-- User info -->
+  <p><strong>Username:</strong> {{ user.username }}</p>
+  <p><strong>Email:</strong> {{ user.email }}</p>
+
+  <!-- Mood chart -->
+  <h3>Your Mood Over Time</h3>
+  <canvas id="profileMoodChart"></canvas>
+
+  <!-- Mood history table -->
+  <h3>Mood History</h3>
+  <table style="width:100%; border-collapse: collapse; margin-top: 1rem;">
+    <tr>
+      <th style="border-bottom:1px solid #ccc; padding:0.5rem;">Date</th>
+      <th style="border-bottom:1px solid #ccc; padding:0.5rem;">Mood</th>
+      <th style="border-bottom:1px solid #ccc; padding:0.5rem;">Note</th>
+      <th style="border-bottom:1px solid #ccc; padding:0.5rem;">Tip</th>
+    </tr>
+    {% for entry in mood_entries %}
+    <tr>
+      <td style="padding:0.5rem;">{{ entry.date }}</td>
+      <td style="padding:0.5rem;">{{ entry.mood }}</td>
+      <td style="padding:0.5rem;">{{ entry.note }}</td>
+      <td style="padding:0.5rem;">{{ entry.generated_tip }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="4" style="padding:0.5rem; text-align:center;">No mood entries yet.</td>
+    </tr>
+    {% endfor %}
+  </table>
+
+  <!-- Helpful tips / songs / stories -->
+  <h3 style="margin-top:1.5rem;">Helpful Tips / Songs / Stories</h3>
+  <ul>
+    {% for entry in mood_entries %}
+      {% if entry.generated_tip %}
+        <li>{{ entry.generated_tip }} (on {{ entry.date }})</li>
+      {% endif %}
+    {% endfor %}
+    {% if not mood_entries %}
+      <li>No tips or entries yet.</li>
+    {% endif %}
+  </ul>
+</div>
+
+<script>
+const entries = {{ mood_entries|safe }};
+const labels = entries.map(e => e.date);
+const data = entries.map(e => e.mood);
+
+const ctx = document.getElementById('profileMoodChart').getContext('2d');
+new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: labels,
+    datasets: [{
+      label: 'Mood Over Time',
+      data: data,
+      borderColor: '#a06cd5',
+      backgroundColor: 'rgba(160,108,213,0.2)',
+      fill: true,
+      tension: 0.3
+    }]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      y: { beginAtZero: true, min: 1, max: 5, stepSize: 1 }
+    }
+  }
+});
+</script>
+
+{% endblock %}

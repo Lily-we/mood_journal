@@ -1,0 +1,215 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login - Mood Journal</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Nunito', sans-serif;
+      background: linear-gradient(135deg, #f9f6ff, #f0e9ff);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    header, footer {
+       background: linear-gradient(135deg, #D8B4F8, #c19cf5);
+       color: #fff;
+       padding: 1rem 2rem;
+       text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .petal {
+      position: absolute;
+      top: -10px;
+      background: #D8B4F8;
+      border-radius: 50%;
+      opacity: 0.7;
+      animation: fall 10s linear infinite;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(110vh) rotate(360deg);
+      }
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      width: 350px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    h2 {
+      margin-bottom: 1.5rem;
+      color: #D8B4F8;
+    }
+
+    /* Form styling */
+    .form-group {
+      margin-bottom: 1rem;
+      text-align: left;
+    }
+    
+     .form-group input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #c19cf5;
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: 0.3s;
+  box-sizing: border-box; /* add this */
+}
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      color: #6b3fa0;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #c19cf5;
+      border-radius: 12px;
+      font-size: 1rem;
+      transition: 0.3s;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #8b4bcc;
+      box-shadow: 0 0 8px rgba(139, 75, 204, 0.3);
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #a06cd5;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-top: 0.5rem;
+    }
+
+    button:hover {
+      background: #8b4bcc;
+    }
+
+    .messages {
+      margin-top: 1rem;
+      list-style: none;
+      padding: 0;
+    }
+
+    .messages li {
+      background: #ffe6ff;
+      color: #6b3fa0;
+      padding: 8px 10px;
+      border-radius: 8px;
+      margin-bottom: 5px;
+      font-size: 0.9rem;
+    }
+
+    p {
+      margin-top: 1rem;
+    }
+
+    p a {
+      color: rgb(152, 40, 250);
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <!-- header -->
+  <header>
+    <h1>Mood Journal</h1>
+  </header>
+
+  <!-- main content -->
+  <main>
+    <script>
+      function createPetal() {
+        const petal = document.createElement("div");
+        petal.classList.add("petal");
+        document.body.appendChild(petal);
+
+        const size = Math.random() * 8 + 8;
+        petal.style.width = `${size}px`;
+        petal.style.height = `${size * 1.2}px`;
+        petal.style.left = Math.random() * window.innerWidth + "px";
+        petal.style.animationDuration = (Math.random() * 5 + 5) + "s";
+        petal.style.opacity = Math.random();
+
+        setTimeout(() => {
+          petal.remove();
+        }, 10000);
+      }
+      setInterval(createPetal, 300);
+    </script>
+
+    <div class="card">
+      <h2>Welcome Back</h2>
+      <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" name="email" id="email" required />
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" name="password" id="password" required />
+        </div>
+
+        <button type="submit">Login</button>
+      </form>
+
+      {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+
+      <p>Don’t have an account? <a href="{% url 'signup' %}">Sign up</a></p>
+    </div>
+  </main>
+
+  <!-- footer -->
+  <footer>
+    <p>&copy; 2025 Mood Journal. All rights reserved.</p>
+  </footer>
+</body>
+</html>

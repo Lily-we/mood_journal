@@ -1,0 +1,9 @@
+{% extends "core/base.html" %}
+{% block title %}Thank You{% endblock %}
+{% block content %}
+<div class="card">
+  <h2>Thank You!</h2>
+  <p>Your mood has been recorded successfully.</p>
+  <a href="{% url 'analytics' %}" class="button-link">View Analytics</a>
+</div>
+{% endblock %}
