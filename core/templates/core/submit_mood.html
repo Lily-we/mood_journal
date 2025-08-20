@@ -1,81 +1,91 @@
 {% extends "core/base.html" %}
-
 {% block title %}Submit Mood{% endblock %}
 
 {% block content %}
-<div class="card">
-  <h2>Submit Your Mood</h2>
+<div class="card" style="max-width: 500px; margin: 2rem auto; padding: 2rem; background: #f8f6fc; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+  <h2 style="text-align:center; color:#7e3ff2;">Submit Your Mood</h2>
+
   <form method="post" action="{% url 'submit_mood' %}">
     {% csrf_token %}
-    <label for="mood">How are you feeling today?</label>
+    
+    <label for="mood" style="font-weight:600; color:#6b3fa0;">How are you feeling today?</label>
     <input type="range" id="mood" name="mood" min="0" max="100" value="50">
 
     <!-- Mood names under slider -->
     <div class="mood-labels">
-      <span>Sad</span>
+      <span>Depressed</span>
+      <span>Frustrated</span>
       <span>Neutral</span>
+      <span>Energetic</span>
       <span>Happy</span>
     </div>
 
-    <label for="note">Tell us more:</label>
+    <label for="note" style="font-weight:600; color:#6b3fa0; margin-top:1rem; display:block;">Tell us more:</label>
     <textarea id="note" name="note" placeholder="Write about your day..."></textarea>
 
-    <button type="submit">Submit</button>
+    <button type="submit">Submit Mood</button>
   </form>
 </div>
 
 <style>
-  input[type="range"] {
-    width: 100%;
-    margin: 0.5rem 0;
-    -webkit-appearance: none;
-    background: linear-gradient(to right, #a855f7, #d8b4f8, #f5e1ff);
-    height: 8px;
-    border-radius: 5px;
-    outline: none;
-  }
+input[type="range"] {
+  width: 100%;
+  margin: 0.5rem 0;
+  -webkit-appearance: none;
+  background: linear-gradient(to right, #a855f7, #d8b4f8, #f5e1ff);
+  height: 8px;
+  border-radius: 5px;
+  outline: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 22px; 
+  height: 22px;
+  background: #fff;
+  border: 3px solid #7e3ff2;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: 0.2s;
+}
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
 
-  input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 20px; 
-    height: 20px;
-    background: #fff;
-    border: 2px solid #7e3ff2;
-    border-radius: 50%;
-    cursor: pointer;
-  }
+.mood-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: #6b3fa0;
+  font-weight: 500;
+}
 
-  .mood-labels {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 0.5rem;
-    font-size: 0.9rem;
-    color: #6b3fa0;
-    font-weight: 500;
-  }
+textarea {
+  width: 100%; 
+  height: 100px;
+  border-radius: 12px;
+  border: 1px solid #c9a7f8;
+  padding: 0.75rem;
+  margin-top: 0.5rem;
+  font-family: inherit;
+  resize: none;
+}
 
-  textarea {
-    width: 100%; 
-    height: 100px;
-    border-radius: 10px;
-    border: 1px solid #c9a7f8;
-    padding: 0.5rem;
-    margin-top: 0.5rem;
-    font-family: inherit;
-    resize: none;
-  }
-
-  button {
-    background-color: #a06cd5;
-    color: #fff;
-    border: none;
-    padding: 0.75rem 1.5rem;
-    margin-top: 1rem;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: 0.3s;
-  }
-  button:hover { background-color: #8b4bcc; }
+button {
+  background: linear-gradient(90deg, #a855f7, #d8b4f8);
+  color: #fff;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  margin-top: 1.5rem;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  width: 100%;
+  transition: 0.3s;
+}
+button:hover {
+  background: linear-gradient(90deg, #8b4bcc, #c99df0);
+}
 </style>
 {% endblock %}

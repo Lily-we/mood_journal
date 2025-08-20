@@ -4,6 +4,22 @@
 <div class="card">
   <h2>Thank You!</h2>
   <p>Your mood has been recorded successfully.</p>
+  {% if recommendation %}
+    <h3>Recommended Songs:</h3>
+    <ul>
+      {% for song in recommendation.songs %}
+        <li>{{ song }}</li>
+      {% endfor %}
+    </ul>
+
+    <h3>Recommended Mini-Stories:</h3>
+    <ul>
+      {% for story in recommendation.stories %}
+        <li>{{ story }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
   <a href="{% url 'analytics' %}" class="button-link">View Analytics</a>
 </div>
 {% endblock %}

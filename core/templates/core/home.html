@@ -1,25 +1,52 @@
 {% extends "core/base.html" %}
 {% load static %}
 
-{% block title %}Home - Cozy eBookstore{% endblock %}
+{% block title %}Home - Cozy Dashboard{% endblock %}
 
 {% block content %}
-  <div class="welcome text-center my-6">
-    📚 Cozy eBookstore – Explore Your Books
-  </div>
 
-  <div class="book-grid grid gap-6 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-    {% for book in books %}
-      <div class="book-card bg-white rounded-2xl shadow-md p-4 text-center">
-        <img src="{{ book.cover.url }}" alt="{{ book.title }}" class="rounded-lg mb-3 h-40 w-full object-cover">
-        <h3 class="font-semibold text-lg">{{ book.title }}</h3>
-        <p class="text-sm text-gray-500">{{ book.author }}</p>
-        <a href="{% url 'book_detail' book.id %}" class="mt-3 inline-block bg-purple-600 text-white px-4 py-2 rounded-xl hover:bg-purple-700">
-          View
+<!-- Hero Section -->
+<section class="hero text-center py-24 px-6" style="background: linear-gradient(135deg, #f8f6fc, #eae4f8); border-radius: 24px; margin-bottom: 3rem;">
+  <h1 class="text-5xl font-bold text-purple-700 mb-4">Welcome back!</h1>
+  <p class="text-xl text-gray-600 max-w-2xl mx-auto">Discover stories and songs to brighten your day</p>
+</section>
+
+<!-- Stories Section -->
+<section class="stories mb-16 px-6">
+  <h2 class="text-3xl font-semibold mb-6 text-purple-700">Stories</h2>
+  <div class="story-scroll flex gap-6 overflow-x-auto pb-4">
+    {% for story in stories %}
+      <div class="story-card bg-white rounded-3xl shadow-lg flex-shrink-0 w-64 p-4 transition-transform hover:-translate-y-1">
+        <img src="{{ story.cover.url }}" alt="{{ story.title }}" class="rounded-xl mb-3 h-40 w-full object-cover">
+        <h3 class="font-semibold text-lg mb-1">{{ story.title }}</h3>
+        <p class="text-sm text-gray-500">{{ story.author }}</p>
+        <a href="{% url 'story_detail' story.id %}" class="mt-2 inline-block bg-purple-600 text-white px-4 py-2 rounded-xl hover:bg-purple-700 text-sm">
+          Read
         </a>
       </div>
     {% empty %}
-      <p>No books available yet.</p>
+      <p>No stories available yet.</p>
     {% endfor %}
   </div>
+</section>
+
+<!-- Songs Section -->
+<section class="songs mb-16 px-6">
+  <h2 class="text-3xl font-semibold mb-6 text-purple-700">Songs</h2>
+  <div class="song-scroll flex gap-6 overflow-x-auto pb-4">
+    {% for song in songs %}
+      <div class="song-card bg-white rounded-3xl shadow-lg flex-shrink-0 w-64 p-4 transition-transform hover:-translate-y-1">
+        <img src="{{ song.cover.url }}" alt="{{ song.title }}" class="rounded-xl mb-3 h-40 w-full object-cover">
+        <h3 class="font-semibold text-lg mb-1">{{ song.title }}</h3>
+        <p class="text-sm text-gray-500">{{ song.artist }}</p>
+        <a href="{% url 'song_detail' song.id %}" class="mt-2 inline-block bg-purple-600 text-white px-4 py-2 rounded-xl hover:bg-purple-700 text-sm">
+          Listen
+        </a>
+      </div>
+    {% empty %}
+      <p>No songs available yet.</p>
+    {% endfor %}
+  </div>
+</section>
+
 {% endblock %}

@@ -7,11 +7,9 @@
 {% endblock %}
 
 {% block content %}
-<div class="card">
-  <h2>User Profile</h2>
-
+<div class="card" style="display:flex; flex-direction:column; gap:1.5rem;">
   <!-- Logout button -->
-  <form method="POST" action="{% url 'logout' %}" style="margin-bottom:1rem;">
+  <form method="POST" action="{% url 'logout' %}" style="align-self:flex-end;">
     {% csrf_token %}
     <button type="submit" style="background:#a06cd5; color:#fff; border:none; padding:0.5rem 1rem; border-radius:8px; cursor:pointer;">
       Logout
@@ -19,48 +17,56 @@
   </form>
 
   <!-- User info -->
-  <p><strong>Username:</strong> {{ user.username }}</p>
-  <p><strong>Email:</strong> {{ user.email }}</p>
+  <div style="margin-bottom:1rem;">
+    <p><strong>Username:</strong> {{ user.username }}</p>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+  </div>
 
   <!-- Mood chart -->
-  <h3>Your Mood Over Time</h3>
-  <canvas id="profileMoodChart"></canvas>
+  <div style="width:100%; max-width:600px;">
+    <h3>Your Mood Over Time</h3>
+    <canvas id="profileMoodChart"></canvas>
+  </div>
 
   <!-- Mood history table -->
-  <h3>Mood History</h3>
-  <table style="width:100%; border-collapse: collapse; margin-top: 1rem;">
-    <tr>
-      <th style="border-bottom:1px solid #ccc; padding:0.5rem;">Date</th>
-      <th style="border-bottom:1px solid #ccc; padding:0.5rem;">Mood</th>
-      <th style="border-bottom:1px solid #ccc; padding:0.5rem;">Note</th>
-      <th style="border-bottom:1px solid #ccc; padding:0.5rem;">Tip</th>
-    </tr>
-    {% for entry in mood_entries %}
-    <tr>
-      <td style="padding:0.5rem;">{{ entry.date }}</td>
-      <td style="padding:0.5rem;">{{ entry.mood }}</td>
-      <td style="padding:0.5rem;">{{ entry.note }}</td>
-      <td style="padding:0.5rem;">{{ entry.generated_tip }}</td>
-    </tr>
-    {% empty %}
-    <tr>
-      <td colspan="4" style="padding:0.5rem; text-align:center;">No mood entries yet.</td>
-    </tr>
-    {% endfor %}
-  </table>
+  <div style="overflow-x:auto;">
+    <h3>Mood History</h3>
+    <table style="width:100%; border-collapse: collapse; margin-top: 1rem;">
+      <tr>
+        <th style="border-bottom:1px solid #ccc; padding:0.5rem;">Date</th>
+        <th style="border-bottom:1px solid #ccc; padding:0.5rem;">Mood</th>
+        <th style="border-bottom:1px solid #ccc; padding:0.5rem;">Note</th>
+        <th style="border-bottom:1px solid #ccc; padding:0.5rem;">Tip</th>
+      </tr>
+      {% for entry in mood_entries_qs %}
+      <tr>
+        <td style="padding:0.5rem;">{{ entry.created_at|date:"Y-m-d" }}</td>
+        <td style="padding:0.5rem;">{{ entry.mood }}</td>
+        <td style="padding:0.5rem;">{{ entry.note }}</td>
+        <td style="padding:0.5rem;">{{ entry.generated_tip }}</td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="4" style="padding:0.5rem; text-align:center;">No mood entries yet.</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
 
   <!-- Helpful tips / songs / stories -->
-  <h3 style="margin-top:1.5rem;">Helpful Tips / Songs / Stories</h3>
-  <ul>
-    {% for entry in mood_entries %}
-      {% if entry.generated_tip %}
-        <li>{{ entry.generated_tip }} (on {{ entry.date }})</li>
+  <div>
+    <h3>Helpful Tips / Songs / Stories</h3>
+    <ul>
+      {% for entry in mood_entries_qs %}
+        {% if entry.generated_tip %}
+          <li>{{ entry.generated_tip }} (on {{ entry.created_at|date:"Y-m-d" }})</li>
+        {% endif %}
+      {% endfor %}
+      {% if not mood_entries_qs %}
+        <li>No tips or entries yet.</li>
       {% endif %}
-    {% endfor %}
-    {% if not mood_entries %}
-      <li>No tips or entries yet.</li>
-    {% endif %}
-  </ul>
+    </ul>
+  </div>
 </div>
 
 <script>
@@ -90,5 +96,4 @@ new Chart(ctx, {
   }
 });
 </script>
-
 {% endblock %}
