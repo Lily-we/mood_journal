@@ -35,6 +35,14 @@ class Song(models.Model):
     title = models.CharField(max_length=200)
     artist = models.CharField(max_length=200)
     mood = models.IntegerField(choices=[(1,'Sad'),(2,'Neutral'),(3,'Happy')])
+    audio_file = models.FileField(upload_to='songs/', blank=True, null=True)
 
 
+class Story(models.Model):
+    title = models.CharField(max_length=200)
+    content = models.TextField()
+    mood = models.IntegerField(choices=[(1,'Sad'),(2,'Neutral'),(3,'Happy')])
+
+    def __str__(self):
+        return self.title
 
