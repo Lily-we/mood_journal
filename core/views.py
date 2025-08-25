@@ -10,6 +10,13 @@ from django.contrib.auth.decorators import login_required
 from .forms import MoodEntryForm
 from django.core.serializers import serialize
 import json
+from rest_framework import viewsets
+from .serializers import MoodEntrySerializer
+
+class MoodEntryViewSet(viewsets.ModelViewSet):
+    queryset = MoodEntry.objects.all()
+    serializer_class = MoodEntrySerializer
+
 
 
 

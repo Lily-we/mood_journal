@@ -3,6 +3,13 @@ from . import views
 from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import MoodEntryViewSet
+
+router = DefaultRouter()
+router.register(r'mood-entries', MoodEntryViewSet)
+
 
 urlpatterns = [
     path("", views.landing, name="landing"),   
@@ -14,4 +21,5 @@ urlpatterns = [
     path("analytics/", views.analytics, name="analytics"),
     path("submit/", views.submit_mood, name="submit_mood"),
     path("thank-you/", views.thank_you, name="thank_you"),
+    path('api/', include(router.urls)),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
