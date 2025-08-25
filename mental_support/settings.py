@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-7cn(1+oy_rf^rcaa9*z^a3bpy6#)z0d42@d#x7m=hn(1ws!s61
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['mood-journal.onrender.com']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
